@@ -4,6 +4,7 @@ ARG KOEL_VERSION=3.5.4
 ARG NODE_VERSION=6.9.4
 
 EXPOSE 8000
+VOLUME ["/config","/media"]
 WORKDIR /opt
 
 RUN apt-get update \
@@ -18,6 +19,11 @@ RUN apt-get update \
     g++ \
     xz-utils \
     gettext
+
+ENV DOCKERIZE_VERSION v0.3.0
+RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
+    && tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
+    && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
 
 RUN wget https://getcomposer.org/installer \
     && php installer \
@@ -41,3 +47,8 @@ RUN wget https://github.com/phanan/koel/archive/v$KOEL_VERSION.zip \
 WORKDIR /opt/koel-$KOEL_VERSION
 
 RUN composer install
+
+COPY .env.docker .env.template
+COPY docker-entrypoint.sh /bin/start.sh
+RUN chmod +x /bin/start.sh
+CMD /bin/start.sh
