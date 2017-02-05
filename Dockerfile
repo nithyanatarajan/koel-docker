@@ -51,7 +51,8 @@ RUN composer install
 
 # skipping yarn install while launching the app
 RUN sed -i 's/yarn/#yarn/g' /opt/koel-$KOEL_VERSION/app/Console/Commands/Init.php \
-    && yarn install
+    && yarn install \
+    && npm prune --production
 
 COPY template/.env.docker .env.template
 COPY bin/docker-entrypoint.sh /bin/start.sh
