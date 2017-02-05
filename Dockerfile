@@ -48,7 +48,7 @@ WORKDIR /opt/koel-$KOEL_VERSION
 
 RUN composer install
 
-COPY .env.docker .env.template
-COPY docker-entrypoint.sh /bin/start.sh
+COPY template/.env.docker .env.template
+COPY bin/docker-entrypoint.sh /bin/start.sh
 RUN chmod +x /bin/start.sh
 CMD /bin/start.sh
