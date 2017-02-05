@@ -14,6 +14,7 @@ RUN apt-get update \
     php5 \
     php5-curl \
     php5-mysql \
+    php5-pgsql \
     python \
     make \
     g++ \

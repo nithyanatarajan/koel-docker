@@ -5,9 +5,9 @@ This project helps in creating a [docker image](https://hub.docker.com/r/nithyan
 
 ## Usage
 
-We should provide **environment variables** to connect to database and to login to the app. We can also provide the path to media folder that contains all the songs to be played. 
+We should provide **environment variables** to connect to database and to login to the app. We can also provide the path to media folder that contains all the songs to be played.
 
-###Environment variables
+### Environment variables
 
 **DB_CONNECTION**
 
@@ -18,7 +18,7 @@ Possible values are:
 * pgsql (PostgreSQL)
 * sqlsrv (Microsoft SQL Server)
 
-> This project currently works only for mysql. Work in progress for others.
+> This project currently works only for mysql and pgsql. Work in progress for sqlsrv.
 
 **DB_HOST**
 
@@ -36,7 +36,7 @@ username/password to connect to a database
 
 Default account details to get started with koel app
 
-###Path to media folder
+### Path to media folder
 
 You can link any folder containing songs by adding as a docker volume at /media
 
@@ -47,22 +47,45 @@ You can link any folder containing songs by adding as a docker volume at /media
 
 ## Examples
 
-### Plain docker with mysql
+### Plain docker
 **Running mysql using docker**
 
 ```
-docker run --name=koel_mysql -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=koel_prod -d mysql:latest
+docker run --name=koel_database \
+-e MYSQL_ROOT_PASSWORD=root \
+-e MYSQL_DATABASE=koel_prod \
+-e MYSQL_USER=koel \
+-e MYSQL_PASSWORD=koel \
+-d \
+mysql
 ```
+
+> **MYSQL_ ROOT_PASSWORD** is mandatory while running mysql. This password is set for superuser **root**.
+>
+> You do not need to create a new user **koel**. You can use the superuser **root**. This is only an example.
+
+**Running pgsql using docker**
+
+```
+docker run --name=koel_database \
+-e POSTGRES_DB=koel_prod \
+-e POSTGRES_USER=koel \
+-e POSTGRES_PASSWORD=koel \
+-d \
+postgres
+```
+> **POSTGRES_USER** will be **postgres** by default if not given.
+
 Then you can pass the necessary environment variables and path to media folder to docker run command to launch the app using docker.
 
 ```
 docker run -it \
---link=koel_mysql \
+--link=koel_database \
 -e DB_CONNECTION=mysql \
--e DB_HOST=koel_mysql \
+-e DB_HOST=koel_database \
 -e DB_DATABASE=koel_prod \
--e DB_USERNAME=root \
--e DB_PASSWORD=root \
+-e DB_USERNAME=koel \
+-e DB_PASSWORD=koel \
 -e ADMIN_EMAIL=someone@example.test \
 -e ADMIN_NAME=admin \
 -e ADMIN_PASSWORD=admin \
@@ -70,6 +93,9 @@ docker run -it \
 -p 8000:8000 \
 nithyanatarajan/koel
 ```
+
+> Note: DB_CONNECTION has to be **mysql** or **pgsql** or **sqlsrv** based on the database you are using.
+
 
 You should be able to access the app at http://localhost:8000
 
@@ -82,10 +108,10 @@ For our example, the file may look like this.
 
 ```
 export DB_CONNECTION=mysql
-export DB_HOST=koel_mysql
+export DB_HOST=koel_database
 export DB_DATABASE=koel_prod
-export DB_USERNAME=root
-export DB_PASSWORD=root
+export DB_USERNAME=koel
+export DB_PASSWORD=koel
 export ADMIN_EMAIL=someone@example.test
 export ADMIN_NAME=admin
 export ADMIN_PASSWORD=admin
@@ -102,9 +128,9 @@ For our example, the docker run command may look like this.
 
 ```
 docker run -it \
---link=koel_postgres \
--v $PWD/example:/config
--v ~/Music:/media \
+--link=koel_database \
+-v $PWD/example:/config \
+-v $HOME/Music:/media \
 -p 8000:8000 \
 nithyanatarajan/koel
 ```
