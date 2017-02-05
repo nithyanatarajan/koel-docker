@@ -1,5 +1,5 @@
-FROM debian:jessie
-MAINTAINER Krishnaswamy,Nithya
+FROM debian:jessie-slim
+
 ARG KOEL_VERSION=3.5.4
 ARG NODE_VERSION=6.9.4
 
@@ -19,7 +19,10 @@ RUN apt-get update \
     make \
     g++ \
     xz-utils \
-    gettext
+    gettext \
+    && apt-get clean autoclean \
+    && apt-get autoremove -y \
+    && rm -rf /var/lib/cache /var/lib/log
 
 ENV DOCKERIZE_VERSION v0.3.0
 RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
