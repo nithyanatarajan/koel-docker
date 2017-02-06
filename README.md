@@ -134,3 +134,44 @@ docker run -it \
 -p 8000:8000 \
 nithyanatarajan/koel
 ```
+
+### Using docker compose
+
+One way of avoiding running database (mysql/postgres) and the app seperately is to use docker-compose.
+
+The docker compose file for koel using postgres may look like this.
+
+```
+version: '2'
+services:
+  app:
+    image: local/koel
+    ports:
+    - "8000:8000"
+    links:
+    - postgres
+    volumes:
+    - $PWD/config:/config
+    - $HOME/Music:/media
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_DB: koel_prod
+      POSTGRES_USER: koel
+      POSTGRES_PASSWORD: koel
+```
+
+> Remember to change your settings.sh file accoringly.
+
+> ```
+> export DB_CONNECTION=pgsql
+> export DB_HOST=postgres
+> ```
+
+To run the app using docker compose, use the command,
+
+```
+docker-compose up
+```
+
+Refer [docker-compose docs](https://docs.docker.com/compose/overview/) for more details.

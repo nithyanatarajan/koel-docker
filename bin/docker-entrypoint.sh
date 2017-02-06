@@ -10,7 +10,6 @@ else
   echo "File $FILE does not exist."
 fi
 
-
 case "$DB_CONNECTION" in
   pgsql) DB_PORT=5432 ;;
   *) DB_PORT=3306 ;;
