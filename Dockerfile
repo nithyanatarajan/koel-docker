@@ -20,6 +20,7 @@ RUN apt-get update \
     g++ \
     xz-utils \
     gettext \
+    jq \
     && apt-get clean autoclean \
     && apt-get autoremove -y \
     && rm -rf /var/lib/cache /var/lib/log
@@ -58,6 +59,6 @@ RUN sed -i 's/yarn/#yarn/g' /opt/koel-$KOEL_VERSION/app/Console/Commands/Init.ph
     && npm prune --production
 
 COPY template/.env.docker .env.template
-COPY bin/docker-entrypoint.sh /bin/start.sh
-RUN chmod +x /bin/start.sh
-CMD /bin/start.sh
+COPY bin /bin
+RUN chmod +x /bin/*.sh
+CMD /bin/docker-entrypoint.sh

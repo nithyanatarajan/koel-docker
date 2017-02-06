@@ -101,20 +101,23 @@ You should be able to access the app at http://localhost:8000
 
 **Alternate way to pass environment variables**
 
-Instead of passing environment variables as arguments, you can add a settings.sh file in the format given in example/settings.sh.
+Instead of passing environment variables as arguments, you can add a settings.json file in the format given in example/settings.json.
 
 For our example, the file may look like this.
 
 
 ```
-export DB_CONNECTION=mysql
-export DB_HOST=koel_database
-export DB_DATABASE=koel_prod
-export DB_USERNAME=koel
-export DB_PASSWORD=koel
-export ADMIN_EMAIL=someone@example.test
-export ADMIN_NAME=admin
-export ADMIN_PASSWORD=admin
+{
+    "DB_CONNECTION": "mysql",
+    "DB_HOST": "koel_database",
+    "DB_DATABASE": "koel_prod",
+    "DB_USERNAME": "koel",
+    "DB_PASSWORD": "koel",
+    "ADMIN_EMAIL": "someone@example.test",
+    "ADMIN_NAME": "admin",
+    "ADMIN_PASSWORD": "admin"
+}
+
 ```
 
 You can add this file as a volume to docker run command.
@@ -161,11 +164,14 @@ services:
       POSTGRES_PASSWORD: koel
 ```
 
-> Remember to change your settings.sh file accoringly.
+> Remember to change your settings.json file accoringly.
 
 > ```
-> export DB_CONNECTION=pgsql
-> export DB_HOST=postgres
+{
+    "DB_CONNECTION": "pgsql",
+    "DB_HOST": "postgres",
+}
+
 > ```
 
 To run the app using docker compose, use the command,

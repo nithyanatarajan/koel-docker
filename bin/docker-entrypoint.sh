@@ -1,11 +1,11 @@
 #! /bin/bash
 set -e
-FILE="/config/settings.sh"
+FILE="/config/settings.json"
 
 if [ -f "$FILE" ];
 then
-  echo "File $FILE found. Sourcing the file."
-  source $FILE
+  echo "File $FILE found. Exporting environmental variables."
+  source /bin/export_env.sh
 else
   echo "File $FILE does not exist."
 fi

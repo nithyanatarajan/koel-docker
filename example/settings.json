@@ -1,0 +1,10 @@
+{
+    "DB_CONNECTION": "{name of the database connection - mysql/pgsql/sqlsrv}",
+    "DB_HOST": "{database host}",
+    "DB_DATABASE": "{database name}",
+    "DB_USERNAME": "{database username}",
+    "DB_PASSWORD": "{database password}",
+    "ADMIN_EMAIL": "{admin account email id}",
+    "ADMIN_NAME": "{admin account username}",
+    "ADMIN_PASSWORD": "{admin account password}"
+}
